@@ -9,8 +9,8 @@
 import UIKit
 
 
-/// url address
-private let urlString = "http://220.170.49.106/3/m/p/i/r/mpirjwpspciasbznoqvzllappypfoz/he.yinyuetai.com/2CE5013B1378C6FD189DB4146E24F7AF.flv?sc=2a836e274011540b&br=3132&vid=549027&aid=79&area=KR&vst=2"
+/// URL
+private let urlString = "https://www.apple.com/jobs/global/media/acvideo/2020-index/us/2020USHero-HD-cc-us-2020_1920x1080h.mp4"
 
 
 class ViewController: UIViewController {
@@ -31,47 +31,23 @@ class ViewController: UIViewController {
         return label
     }()
     
+}
 
-    // MARK: - View life cycle
+// MARK: - View life cycle
+extension ViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configNotificationObservers()
         configCircleLayers()
         configPercentageLabel()
         view.backgroundColor = UIColor.backgroundColor
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTap)))
     }
+}
 
-    /// 配置通知观察者
-    private func configNotificationObservers() {
-        //注册程序进入前台通知
-        NotificationCenter.default.addObserver(self, selector: #selector(handleEnter), name: UIApplication.willEnterForegroundNotification, object: nil)
-    }
-    
-    /// 处理通知
-    @objc private func handleEnter() {
-        animatePulsatingLayer()
-    }
-    
-    /// 配置圆形图层
-    private func configCircleLayers() {
-        
-        pulsatigLayer = createCircleShapeLayer(strokeColor: .clear, fillColor: .pulsatingFillColor)
-        view.layer.addSublayer(pulsatigLayer)
-        
-        animatePulsatingLayer()
-        
-        /// 跟踪图层
-        let trackLayer = createCircleShapeLayer(strokeColor: .trackStrokeColor, fillColor: .backgroundColor)
-        view.layer.addSublayer(trackLayer)
-        shapeLayer = createCircleShapeLayer(strokeColor: .outlineStrokeColor, fillColor: .clear)
-        
-        // 将动画向左转90度
-        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-        shapeLayer.strokeEnd = 0
-        view.layer.addSublayer(shapeLayer)
-    }
+//MARK: - Animations
+extension ViewController {
     
     /// 动画脉动层
     private func animatePulsatingLayer() {
@@ -89,23 +65,41 @@ class ViewController: UIViewController {
         // 添加动画
         pulsatigLayer.add(animation, forKey: "pulsing")
     }
+}
+
+//MARK: - Configure
+extension ViewController {
+    
+    /// 配置通知观察者
+    private func configNotificationObservers() {
+        //注册程序进入前台通知
+        NotificationCenter.default.addObserver(self, selector: #selector(handleEnter), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    /// 配置圆形图层
+    private func configCircleLayers() {
+        
+        pulsatigLayer = CreateCircleShapeLayer(strokeColor: .clear, fillColor: .pulsatingFillColor)
+        view.layer.addSublayer(pulsatigLayer)
+        
+        animatePulsatingLayer()
+        
+        /// 跟踪图层
+        let trackLayer = CreateCircleShapeLayer(strokeColor: .trackStrokeColor, fillColor: .backgroundColor)
+        view.layer.addSublayer(trackLayer)
+        
+        shapeLayer = CreateCircleShapeLayer(strokeColor: .outlineStrokeColor, fillColor: .clear)
+        // 将动画向左转90度
+        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayer.strokeEnd = 0
+        view.layer.addSublayer(shapeLayer)
+    }
     
     /// 配置百分比标签
     private func configPercentageLabel() {
         percentageLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         percentageLabel.center = view.center
         view.addSubview(percentageLabel)
-    }
-    
-    /// 动画圈
-    private func animateCircle() {
-        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        basicAnimation.toValue = 1
-        basicAnimation.duration = 2
-        basicAnimation.fillMode = CAMediaTimingFillMode.forwards
-        basicAnimation.isRemovedOnCompletion = false
-        
-        shapeLayer.add(basicAnimation, forKey: "urSoBasic")
     }
     
     /// 开始下载文件
@@ -123,16 +117,23 @@ class ViewController: UIViewController {
         downloadTask.resume()
     }
     
+}
+
+//MARK: - Event handling
+extension ViewController {
+    
     /// 点击事件
     @objc private func handleTap() {
-        
         beginDownloadingFile()
-//        animateCircle()
+    }
+    
+    /// 处理通知
+    @objc private func handleEnter() {
+        animatePulsatingLayer()
     }
 }
 
-
-// MARK: - custom method
+// MARK: - Create Circle Layer (ShapeLayer)
 extension ViewController {
     
     /// 创建圆形图层(ShapeLayer)
@@ -141,7 +142,7 @@ extension ViewController {
     ///   - strokeColor: 绘制颜色
     ///   - fillColor: 填充颜色
     /// - Returns: CAShapeLayer
-    private func createCircleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+    private func CreateCircleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
         let circularPath = UIBezierPath(arcCenter: .zero, radius: 100, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
