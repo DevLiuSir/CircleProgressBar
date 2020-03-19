@@ -20,4 +20,6 @@
 
 ### Design
 
-![](https://github.com/DevLiuSir/CircleProgressBar/raw/master/Design/Showcase.gif)
+<p align="center"> 
+<img  src="https://github.com/DevLiuSir/CircleProgressBar/raw/master/Design/Showcase.gif" width="416" height="726"></p>
+
